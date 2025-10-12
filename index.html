@@ -1,11 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <title>Spice Coffee Shop</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <link rel="stylesheet" href="./index.css" />
   </head>
   <body>
+    <header>
+      <h1>Spice Coffee Shop</h1>
+      <p>
+        Welcome to Spice Coffee Shop! Explore our delicious coffee menu below:
+      </p>
+    </header>
+
+    <main>
+      <div class="button-container">
+        <!-- Button to trigger API call for hot coffee -->
+        <button id="hotBtn">🔥 Hot Coffee</button>
+      </div>
+
+      <!-- Container where coffee cards will be displayed in a single column -->
+      <div id="coffee-list"></div>
+    </main>
+
     <script src="./index.js"></script>
   </body>
 </html>
