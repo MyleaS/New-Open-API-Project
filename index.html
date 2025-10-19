@@ -17,13 +17,44 @@
     <main>
       <div class="button-container">
         <!-- Button to trigger API call for hot coffee -->
+        <h2>Choose Your Coffee</h2>
         <button id="hotBtn">🔥 Hot Coffee</button>
+        <h2>View Art Work</h2>
+        <!-- Button to trigger API call for iced coffee -->
+        <button id="artWork">Art Work</button>
       </div>
 
       <!-- Container where coffee cards will be displayed in a single column -->
       <div id="coffee-list"></div>
     </main>
 
+    <!--Art Institution Section-->
+    <section id="art-institution-section">
+      <h2>Artworks from the Art Institute of Chicago</h2>
+      <p>Enjoy your coffee, while viewing Chicago's wonderful art pieces.</p>
+      <div id="art-container" class="art-container"></div>
+    </section>
+
+    <!--User Preference Form Section-->
+    <h3>Add Your Favorite Coffee Preference</h3>
+    <form id="coffeeForm">
+      <input type="text" id="userName" placeholder="Your name" required />
+      <input
+        type="text"
+        id="favCoffee"
+        placeholder="Favorite coffee"
+        required
+      />
+      <button type="submit">Add</button>
+    </form>
+
+    <ul id="userList"></ul>
+
     <script src="./index.js"></script>
+
+    <!--Copyright Section-->
+    <footer>
+      <p>&copy; 2025 Spice Coffee Shop. All rights reserved.</p>
+    </footer>
   </body>
 </html>

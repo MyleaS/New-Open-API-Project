@@ -1,5 +1,6 @@
 const coffeeList = document.getElementById("coffee-list");
 const hotBtn = document.getElementById("hotBtn");
+const artWorkBtn = document.getElementById("artWork");
 
 // Add click event to hot coffee button
 hotBtn.addEventListener("click", () => {
@@ -14,6 +15,7 @@ async function fetchCoffee(type) {
   try {
     // Fetch data from the Sample APIs coffee endpoint
     const response = await fetch(`https://api.sampleapis.com/coffee/${type}`);
+    console.log(response);
     const data = await response.json();
     data.pop(); // Remove last item if needed
     // Call function to display the fetched data
@@ -48,3 +50,35 @@ function displayCoffee(coffees) {
     coffeeList.appendChild(card);
   });
 }
+
+// Art Institute of Chicago API Integration//
+artWorkBtn.addEventListener("click", () => {
+  const artContainer = document.getElementById("art-container");
+
+  fetch("https://api.artic.edu/api/v1/artworks/117266")
+    // .then((res) => console.log(res) || response)
+    .then((res) => res.json())
+    .then((data) => {
+      const artwork = data.data;
+      const imageId = artwork.image_id;
+      const imageUrl = `https://www.artic.edu/iiif/2/${imageId}/full/843,/0/default.jpg`;
+
+      https: artContainer.innerHTML = `
+        <div class="art-card">
+          <img src="${imageUrl}" alt="${artwork.title}" class="art-image"/>
+          <div class="art-details">
+            <h3>${artwork.title}</h3>
+            <p><strong>Artist:</strong> ${artwork.artist_display}</p>
+            <p><strong>Date:</strong> ${artwork.date_display}</p>
+            <p><strong>Medium:</strong> ${artwork.medium_display}</p>
+            <p><strong>Dimensions:</strong> ${artwork.dimensions}</p>
+            <p><strong>Place of Origin:</strong> ${artwork.place_of_origin}</p>
+          </div>
+        </div>
+      `;
+    })
+    .catch((err) => {
+      // artContainer.innerHTML = `<p>Failed to load artwork. Please try again later.</p>`;
+      // console.error(err);
+    });
+});
