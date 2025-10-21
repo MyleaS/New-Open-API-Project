@@ -1,84 +1,163 @@
+// Selecting DOM elements//
 const coffeeList = document.getElementById("coffee-list");
 const hotBtn = document.getElementById("hotBtn");
 const artWorkBtn = document.getElementById("artWork");
+const coffeeForm = document.getElementById("coffeeForm");
+const userList = document.getElementById("userList");
 
-// Add click event to hot coffee button
-hotBtn.addEventListener("click", () => {
-  fetchCoffee("hot"); // API endpoint expects "hot"
+// Initial log to confirm script is loaded//
+console.log("JavaScript loaded successfully!");
+console.log("Elements found:", {
+  coffeeList,
+  hotBtn,
+  artWorkBtn,
+  coffeeForm,
+  userList,
 });
 
-// Async function to fetch coffee data from API
+// 🔥 Hot Coffee Button
+hotBtn.addEventListener("click", () => {
+  console.log("Hot Coffee button clicked!");
+  fetchCoffee("hot");
+});
+
+// 🔁 Fetch coffee data from sample API
 async function fetchCoffee(type) {
-  // Show loading message while fetching
-  coffeeList.innerHTML = "<p>Loading...</p>";
+  coffeeList.innerHTML = "<p class='message'>Loading...</p>";
+  console.log(`Fetching ${type} coffee data...`);
 
   try {
-    // Fetch data from the Sample APIs coffee endpoint
     const response = await fetch(`https://api.sampleapis.com/coffee/${type}`);
-    console.log(response);
+    console.log("Coffee API response:", response);
+
     const data = await response.json();
-    data.pop(); // Remove last item if needed
-    // Call function to display the fetched data
+    console.log("Coffee data received:", data);
+    console.log("Number of coffees:", data.length);
+
+    data.pop(); // Optional: remove last item if API sometimes returns a broken item
+    console.log("After removing last item:", data.length);
+
     displayCoffee(data);
   } catch (error) {
-    // Show error message if fetch fails
-    coffeeList.innerHTML = `<p>Error loading data: ${error.message}</p>`;
+    console.error("Error fetching coffee data:", error);
+    coffeeList.innerHTML = `<p class='message'>Error loading data: ${error.message}</p>`;
   }
 }
 
-// Function to display coffee data in the DOM
+// Render Coffee Cards//
 function displayCoffee(coffees) {
-  // Clear the list first
+  console.log("Displaying coffee cards...");
   coffeeList.innerHTML = "";
 
-  coffees.forEach((coffee) => {
-    // Create a new div element for each card
+  coffees.forEach((coffee, index) => {
+    console.log(`Coffee ${index + 1}:`, coffee);
+
     const card = document.createElement("div");
     card.className = "coffee-card";
-
-    // Build the card structure with title, image, and description
-    // Title comes first
-    // Image comes second
-    // Description comes last
+    //Template for Coffee Card//
     card.innerHTML = `
-        <div class="coffee-title">${coffee.title}</div>
-        <img src="${coffee.image}" alt="${coffee.title}" class="coffee-image" onerror="this.src='https://via.placeholder.com/800x300?text=Image+Not+Available'">
-        <div class="coffee-description">${coffee.description}</div>
+      <div class="coffee-title">${coffee.title}</div>
+      <img src="${coffee.image}" alt="${coffee.title}" class="coffee-image"
+           onerror="this.src='https://via.placeholder.com/800x300?text=Image+Not+Available'">
+      <div class="coffee-description">${coffee.description}</div>
     `;
 
-    // Add the card to the coffeeList container
     coffeeList.appendChild(card);
   });
+
+  console.log(`Successfully displayed ${coffees.length} coffee cards`);
 }
 
-// Art Institute of Chicago API Integration//
-artWorkBtn.addEventListener("click", () => {
+// Random Art Institute Artwork//
+artWorkBtn.addEventListener("click", async () => {
+  console.log("Artwork button clicked!");
+
   const artContainer = document.getElementById("art-container");
+  artContainer.innerHTML = "<p class='message'>Loading artwork...</p>";
 
-  fetch("https://api.artic.edu/api/v1/artworks/117266")
-    // .then((res) => console.log(res) || response)
-    .then((res) => res.json())
-    .then((data) => {
-      const artwork = data.data;
-      const imageId = artwork.image_id;
-      const imageUrl = `https://www.artic.edu/iiif/2/${imageId}/full/843,/0/default.jpg`;
+  try {
+    // Fetch a list of artworks with images
+    console.log("Fetching artworks from Art Institute API...");
 
-      https: artContainer.innerHTML = `
-        <div class="art-card">
-          <img src="${imageUrl}" alt="${artwork.title}" class="art-image"/>
-          <div class="art-details">
-            <h3>${artwork.title}</h3>
-            <p><strong>Artist:</strong> ${artwork.artist_display}</p>
-            <p><strong>Date:</strong> ${artwork.date_display}</p>
-            <p><strong>Medium:</strong> ${artwork.medium_display}</p>
-            <p><strong>Dimensions:</strong> ${artwork.dimensions}</p>
-            <p><strong>Place of Origin:</strong> ${artwork.place_of_origin}</p>
-          </div>
+    const response = await fetch(
+      "https://api.artic.edu/api/v1/artworks?limit=100&fields=id,title,artist_display,date_display,medium_display,dimensions,place_of_origin,image_id"
+    );
+    console.log("Artwork API response:", response);
+
+    const data = await response.json();
+    console.log("Artwork data received:", data);
+    console.log("Total artworks:", data.data.length);
+
+    // Filter artworks that have images
+    const artworksWithImages = data.data.filter((art) => art.image_id);
+    console.log("Artworks with images:", artworksWithImages.length);
+    console.log("Filtered artworks:", artworksWithImages);
+    //If no artworks with images found show message//
+    if (artworksWithImages.length === 0) {
+      console.warn("No artworks with images found!");
+      artContainer.innerHTML =
+        "<p class='message'>No artworks with images found.</p>";
+      return;
+    }
+
+    // Pick a random artwork
+    const randomIndex = Math.floor(Math.random() * artworksWithImages.length);
+    const randomArtwork = artworksWithImages[randomIndex];
+    console.log(
+      "Random artwork selected (index " + randomIndex + "):",
+      randomArtwork
+    );
+    // Construct image URL//
+    const imageUrl = `https://www.artic.edu/iiif/2/${randomArtwork.image_id}/full/843,/0/default.jpg`;
+    console.log("Image URL:", imageUrl);
+
+    artContainer.innerHTML = `
+      <div class="art-card">
+        <img src="${imageUrl}" alt="${randomArtwork.title}" class="art-image" 
+             onerror="this.src='https://via.placeholder.com/300x400?text=Image+Not+Available'"/>
+        <div class="art-details">
+          <h3>${randomArtwork.title || "Untitled"}</h3>
+          <p><strong>Artist:</strong> ${
+            randomArtwork.artist_display || "Unknown"
+          }</p>
+          <p><strong>Date:</strong> ${
+            randomArtwork.date_display || "Unknown"
+          }</p>
+          <p><strong>Medium:</strong> ${
+            randomArtwork.medium_display || "Unknown"
+          }</p>
+          <p><strong>Dimensions:</strong> ${
+            randomArtwork.dimensions || "Unknown"
+          }</p>
+          <p><strong>Place of Origin:</strong> ${
+            randomArtwork.place_of_origin || "Unknown"
+          }</p>
         </div>
-      `;
-    })
-    .catch((err) => {
-      // artContainer.innerHTML = `<p>Failed to load artwork. Please try again later.</p>`;
-      // console.error(err);
-    });
+      </div>
+    `;
+
+    console.log("Artwork displayed successfully!");
+  } catch (error) {
+    console.error("Error fetching artwork:", error);
+    artContainer.innerHTML = `<p class='message'>Failed to load artwork. Please try again later.</p>`;
+  }
+});
+
+// Coffee preference form submission//
+coffeeForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  console.log("Form submitted!");
+
+  const userName = document.getElementById("userName").value;
+  const favCoffee = document.getElementById("favCoffee").value;
+  console.log("User data:", { userName, favCoffee });
+
+  const li = document.createElement("li");
+  li.textContent = `${userName} loves ${favCoffee}`;
+  userList.appendChild(li);
+  console.log("User preference added to list");
+
+  // Reset form
+  coffeeForm.reset();
+  console.log("Form reset");
 });

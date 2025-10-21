@@ -1,16 +1,51 @@
+/* Reset some default browser styles for consistency across browsers */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* General body styling */
 body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* Clean, modern font */
+  background: linear-gradient(
+    135deg,
+    #6b4423 0%,
+    #3e2723 25%,
+    #5d4037 50%,
+    #8b4513 75%,
+    #a0522d 100%
+  ); /* Rich coffee-themed gradient */
+  background-attachment: fixed; /* Ensures background doesn't scroll with content */
+  min-height: 100vh; /* Makes body take at least full height */
   padding: 20px;
+  position: relative;
 }
 
+/* Coffee bean pattern overlay on the body using pseudo-element */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(
+      circle at 20% 30%,
+      rgba(139, 69, 19, 0.1) 1px,
+      transparent 1px
+    ),
+    radial-gradient(
+      circle at 80% 70%,
+      rgba(139, 69, 19, 0.1) 1px,
+      transparent 1px
+    ); /* Simulates a subtle coffee bean pattern */
+  background-size: 50px 50px;
+  pointer-events: none; /* Allows clicks through this layer */
+  z-index: -1; /* Keeps it in the background */
+}
+
+/* Header section */
 header {
   text-align: center;
   color: white;
@@ -20,7 +55,7 @@ header {
 header h1 {
   font-size: 2.5em;
   margin-bottom: 10px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Makes text pop against background */
 }
 
 header p {
@@ -28,15 +63,26 @@ header p {
   opacity: 0.9;
 }
 
-/* Button styling */
+/* Container for buttons */
 .button-container {
   text-align: center;
   margin-bottom: 30px;
+  background: rgba(139, 69, 19, 0.3); /* Semi-transparent brown background */
+  padding: 2rem;
+  border-radius: 20px;
+  backdrop-filter: blur(10px); /* Adds a soft blur effect */
 }
 
+.button-container h2 {
+  color: #fff8dc;
+  margin: 20px 0 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* General button styling */
 button {
-  background: white;
-  color: #667eea;
+  background: linear-gradient(135deg, #d2691e 0%, #cd853f 100%);
+  color: white;
   border: none;
   padding: 15px 40px;
   font-size: 1.1em;
@@ -44,40 +90,41 @@ button {
   border-radius: 30px;
   cursor: pointer;
   margin: 0 10px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease; /* Smooth hover effect */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
-
+/* Button hover and active states */
 button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-  background: #f0f0f0;
+  transform: translateY(-2px); /* Slight lift on hover */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(135deg, #cd853f 0%, #deb887 100%);
 }
 
 button:active {
-  transform: translateY(0);
+  transform: translateY(0); /* Removes lift when clicked */
 }
 
-/* Card container - single column layout */
+/* Coffee list container - column layout */
 #coffee-list {
   max-width: 800px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 25px;
-  list-style: none;
+  list-style: none; /* Removes default bullets */
 }
 
-/* Individual card styling */
+/* Individual coffee card */
 .coffee-card {
-  background: white;
+  background: linear-gradient(135deg, #fffaf0 0%, #fff8dc 100%);
   border-radius: 15px;
   padding: 25px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
   gap: 15px;
+  border-left: 5px solid #8b4513; /* Accent border */
 }
 
 .coffee-card:hover {
@@ -85,16 +132,22 @@ button:active {
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
 }
 
-/* Title styling - first in row */
+/* Coffee card title */
 .coffee-title {
   font-size: 1.8em;
-  color: #333;
+  color: #3e2723;
   font-weight: bold;
-  border-bottom: 3px solid #667eea;
+  border-bottom: 3px solid #8b4513;
   padding-bottom: 10px;
+  background: linear-gradient(
+    90deg,
+    rgba(139, 69, 19, 0.1) 0%,
+    transparent 100%
+  ); /* Decorative background gradient */
+  padding-left: 10px;
 }
 
-/* Image styling - second in row */
+/* Coffee image styling */
 .coffee-image {
   width: 50%;
   height: 300px;
@@ -103,7 +156,7 @@ button:active {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Description styling - last in row */
+/* Coffee description styling */
 .coffee-description {
   font-size: 1.1em;
   color: #555;
@@ -111,7 +164,7 @@ button:active {
   text-align: justify;
 }
 
-/* Loading and error messages */
+/* General message styling (loading/error) */
 .message {
   text-align: center;
   color: white;
@@ -119,50 +172,43 @@ button:active {
   padding: 20px;
 }
 
-/* Responsive design */
-@media (max-width: 600px) {
-  header h1 {
-    font-size: 2em;
-  }
-
-  button {
-    padding: 12px 30px;
-    font-size: 1em;
-    margin: 5px;
-  }
-
-  .coffee-card {
-    padding: 20px;
-  }
-
-  .coffee-title {
-    font-size: 1.5em;
-  }
-
-  .coffee-image {
-    height: 200px;
-  }
-}
-
-/* Artwork section */
-#art-section {
+/* Art institution section */
+#art-institution-section {
   padding: 2rem;
-  background-color: #f7f7f7;
-  border-top: 2px solid #ccc;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 69, 19, 0.4) 0%,
+    rgba(101, 67, 33, 0.5) 100%
+  );
+  backdrop-filter: blur(10px);
+  border-top: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  margin-top: 2rem;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
 }
 
+#art-institution-section h2,
+#art-institution-section p {
+  color: rgb(10, 10, 10);
+  margin-bottom: 1rem;
+}
+
+/* Container for art cards */
 .art-container {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   flex-wrap: wrap;
   gap: 2rem;
+  margin-top: 1rem;
 }
 
+/* Individual art card */
 .art-card {
-  background-color: white;
+  background: linear-gradient(135deg, #fff5ee 0%, #faebd7 100%);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   max-width: 800px;
   width: 100%;
@@ -170,8 +216,10 @@ button:active {
   flex-direction: row;
   gap: 1rem;
   padding: 1rem;
+  border-left: 5px solid #a0522d;
 }
 
+/* Art image inside card */
 .art-image {
   width: 300px;
   height: auto;
@@ -179,6 +227,7 @@ button:active {
   object-fit: cover;
 }
 
+/* Text/details within art card */
 .art-details {
   flex: 1;
 }
@@ -192,4 +241,45 @@ button:active {
 .art-details p {
   margin: 0.5rem 0;
   color: #555;
+}
+
+/* Section title for form */
+h3 {
+  text-align: center;
+  color: white;
+  margin: 2rem 0 1rem;
+}
+
+/* Form container */
+form {
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Input field styling */
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+/* Submit button inside form */
+form button {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* User list section */
+#userList {
+  max-width: 600px;
+  margin: 0 auto;
+  list-style: none;
+  padding: 0;
 }
