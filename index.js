@@ -17,6 +17,7 @@ console.log("Elements found:", {
 
 // 🔥 Hot Coffee Button
 hotBtn.addEventListener("click", () => {
+  deleteAlArtwork(); // Clear artwork cards when fetching coffee
   console.log("Hot Coffee button clicked!");
   fetchCoffee("hot");
 });
@@ -34,7 +35,7 @@ async function fetchCoffee(type) {
     console.log("Coffee data received:", data);
     console.log("Number of coffees:", data.length);
 
-    data.pop(); // Optional: remove last item if API sometimes returns a broken item
+    delete data[3]; // Remove the 4th item (index 3)
     console.log("After removing last item:", data.length);
 
     displayCoffee(data);
@@ -67,9 +68,15 @@ function displayCoffee(coffees) {
 
   console.log(`Successfully displayed ${coffees.length} coffee cards`);
 }
+function deleteAllCoffee() {
+  console.log("Deleting all coffee cards...");
+  coffeeList.innerHTML = "";
+  console.log("All coffee cards deleted.");
+}
 
 // Random Art Institute Artwork//
 artWorkBtn.addEventListener("click", async () => {
+  deleteAllCoffee(); // Clear coffee cards when fetching artwork
   console.log("Artwork button clicked!");
 
   const artContainer = document.getElementById("art-container");
@@ -113,7 +120,7 @@ artWorkBtn.addEventListener("click", async () => {
 
     artContainer.innerHTML = `
       <div class="art-card">
-        <img src="${imageUrl}" alt="${randomArtwork.title}" class="art-image" 
+        <img src="${imageUrl}" alt="${randomArtwork.title}" class="art-image"
              onerror="this.src='https://via.placeholder.com/300x400?text=Image+Not+Available'"/>
         <div class="art-details">
           <h3>${randomArtwork.title || "Untitled"}</h3>
@@ -161,3 +168,10 @@ coffeeForm.addEventListener("submit", (e) => {
   coffeeForm.reset();
   console.log("Form reset");
 });
+
+function deleteAlArtwork() {
+  console.log("Deleting all artwork cards...");
+  const artContainer = document.getElementById("art-container");
+  artContainer.innerHTML = "";
+  console.log("All artwork cards deleted.");
+}
