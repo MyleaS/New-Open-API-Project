@@ -168,7 +168,7 @@ coffeeForm.addEventListener("submit", (e) => {
   coffeeForm.reset();
   console.log("Form reset");
 });
-
+// Function to delete all artwork cards
 function deleteAlArtwork() {
   console.log("Deleting all artwork cards...");
   const artContainer = document.getElementById("art-container");
