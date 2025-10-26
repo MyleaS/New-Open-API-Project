@@ -74,7 +74,100 @@ function deleteAllCoffee() {
   console.log("All coffee cards deleted.");
 }
 
-// Random Art Institute Artwork//
+// // Random Art Institute Artwork//
+// artWorkBtn.addEventListener("click", async () => {
+//   deleteAllCoffee(); // Clear coffee cards when fetching artwork
+//   console.log("Artwork button clicked!");
+
+//   const artContainer = document.getElementById("art-container");
+//   artContainer.innerHTML = "<p class='message'>Loading artwork...</p>";
+
+//   try {
+//     // Fetch a list of artworks with images
+//     console.log("Fetching artworks from Art Institute API...");
+
+//     const response = await fetch(
+//       "https://api.artic.edu/api/v1/artworks?limit=100&fields=id,title,artist_display,date_display,medium_display,dimensions,place_of_origin,image_id"
+//     );
+//     console.log("Artwork API response:", response);
+
+//     const data = await response.json();
+//     console.log("Artwork data received:", data);
+//     console.log("Total artworks:", data.data.length);
+
+//     // Filter artworks that have images
+//     const artworksWithImages = data.data.filter((art) => art.image_id);
+//     artworksWithImages.splice(0, 90);
+
+//     console.log("Artworks with images:", artworksWithImages.length);
+//     console.log("Filtered artworks:", artworksWithImages);
+
+//     //If no artworks with images found show message//
+//     if (artworksWithImages.length === 0) {
+//       console.warn("No artworks with images found!");
+//       artContainer.innerHTML =
+//         "<p class='message'>No artworks with images found.</p>";
+//       return;
+//     }
+
+//     // Pick a random artwork
+//     const randomIndex = Math.floor(Math.random() * artworksWithImages.length);
+//     const randomArtwork = artworksWithImages[randomIndex];
+//     console.log(
+//       "Random artwork selected (index " + randomIndex + "):",
+//       randomArtwork
+//     );
+//     // Construct image URL//
+//     const imageUrl = `https://www.artic.edu/iiif/2/${randomArtwork.image_id}/full/843,/0/default.jpg`;
+//     console.log("Image URL:", imageUrl);
+
+//     artContainer.innerHTML = `
+//       <div class="art-card">
+//         <img src="${imageUrl}" alt="${randomArtwork.title}" class="art-image"
+//              onerror="this.src='https://via.placeholder.com/300x400?text=Image+Not+Available'"/>
+//         <div class="art-details">
+//           <h3>${randomArtwork.title || "Untitled"}</h3>
+//           <p><strong>Artist:</strong> ${
+//             randomArtwork.artist_display || "Unknown"
+//           }</p>
+//           <p><strong>Date:</strong> ${
+//             randomArtwork.date_display || "Unknown"
+//           }</p>
+//           <p><strong>Medium:</strong> ${
+//             randomArtwork.medium_display || "Unknown"
+//           }</p>
+//           <p><strong>Dimensions:</strong> ${
+//             randomArtwork.dimensions || "Unknown"
+//           }</p>
+//           <p><strong>Place of Origin:</strong> ${
+//             randomArtwork.place_of_origin || "Unknown"
+//           }</p>
+//         </div>
+//       </div>
+//     `;
+
+//     console.log("Artwork displayed successfully!");
+//   } catch (error) {
+//     console.error("Error fetching artwork:", error);
+//     artContainer.innerHTML = `<p class='message'>Failed to load artwork. Please try again later.</p>`;
+//   }
+// });
+
+// Array of 10 curated Art Institute of Chicago artwork IDs
+const artworkIds = [
+  27992, // A Sunday on La Grande Jatte by Georges Seurat
+  28560, // The Bedroom by Vincent van Gogh
+  111628, // Nighthawks by Edward Hopper
+  16487, // American Gothic by Grant Wood
+  20684, // The Child's Bath by Mary Cassatt
+  109439, // Paris Street; Rainy Day by Gustave Caillebotte
+  16568, // The Old Guitarist by Pablo Picasso
+  81558, // Sky Above Clouds IV by Georgia O'Keeffe
+  6565, // The Herring Net by Winslow Homer
+  24306, // Stacks of Wheat (End of Summer) by Claude Monet
+];
+
+// Random Art Institute Artwork
 artWorkBtn.addEventListener("click", async () => {
   deleteAllCoffee(); // Clear coffee cards when fetching artwork
   console.log("Artwork button clicked!");
@@ -83,61 +176,44 @@ artWorkBtn.addEventListener("click", async () => {
   artContainer.innerHTML = "<p class='message'>Loading artwork...</p>";
 
   try {
-    // Fetch a list of artworks with images
-    console.log("Fetching artworks from Art Institute API...");
+    // Pick a random artwork ID from the array
+    const randomId = artworkIds[Math.floor(Math.random() * artworkIds.length)];
+    console.log("Selected artwork ID:", randomId);
 
+    // Fetch the specific artwork
     const response = await fetch(
-      "https://api.artic.edu/api/v1/artworks?limit=100&fields=id,title,artist_display,date_display,medium_display,dimensions,place_of_origin,image_id"
+      `https://api.artic.edu/api/v1/artworks/${randomId}?fields=id,title,artist_display,date_display,medium_display,dimensions,place_of_origin,image_id`
     );
     console.log("Artwork API response:", response);
 
     const data = await response.json();
-    console.log("Artwork data received:", data);
-    console.log("Total artworks:", data.data.length);
+    const artwork = data.data;
+    console.log("Artwork data received:", artwork);
 
-    // Filter artworks that have images
-    const artworksWithImages = data.data.filter((art) => art.image_id);
-    console.log("Artworks with images:", artworksWithImages.length);
-    console.log("Filtered artworks:", artworksWithImages);
-    //If no artworks with images found show message//
-    if (artworksWithImages.length === 0) {
-      console.warn("No artworks with images found!");
+    // Check if artwork has an image
+    if (!artwork.image_id) {
+      console.warn("Selected artwork has no image!");
       artContainer.innerHTML =
-        "<p class='message'>No artworks with images found.</p>";
+        "<p class='message'>No image available for this artwork.</p>";
       return;
     }
 
-    // Pick a random artwork
-    const randomIndex = Math.floor(Math.random() * artworksWithImages.length);
-    const randomArtwork = artworksWithImages[randomIndex];
-    console.log(
-      "Random artwork selected (index " + randomIndex + "):",
-      randomArtwork
-    );
-    // Construct image URL//
-    const imageUrl = `https://www.artic.edu/iiif/2/${randomArtwork.image_id}/full/843,/0/default.jpg`;
+    // Construct image URL
+    const imageUrl = `https://www.artic.edu/iiif/2/${artwork.image_id}/full/843,/0/default.jpg`;
     console.log("Image URL:", imageUrl);
 
     artContainer.innerHTML = `
       <div class="art-card">
-        <img src="${imageUrl}" alt="${randomArtwork.title}" class="art-image"
+        <img src="${imageUrl}" alt="${artwork.title}" class="art-image"
              onerror="this.src='https://via.placeholder.com/300x400?text=Image+Not+Available'"/>
         <div class="art-details">
-          <h3>${randomArtwork.title || "Untitled"}</h3>
-          <p><strong>Artist:</strong> ${
-            randomArtwork.artist_display || "Unknown"
-          }</p>
-          <p><strong>Date:</strong> ${
-            randomArtwork.date_display || "Unknown"
-          }</p>
-          <p><strong>Medium:</strong> ${
-            randomArtwork.medium_display || "Unknown"
-          }</p>
-          <p><strong>Dimensions:</strong> ${
-            randomArtwork.dimensions || "Unknown"
-          }</p>
+          <h3>${artwork.title || "Untitled"}</h3>
+          <p><strong>Artist:</strong> ${artwork.artist_display || "Unknown"}</p>
+          <p><strong>Date:</strong> ${artwork.date_display || "Unknown"}</p>
+          <p><strong>Medium:</strong> ${artwork.medium_display || "Unknown"}</p>
+          <p><strong>Dimensions:</strong> ${artwork.dimensions || "Unknown"}</p>
           <p><strong>Place of Origin:</strong> ${
-            randomArtwork.place_of_origin || "Unknown"
+            artwork.place_of_origin || "Unknown"
           }</p>
         </div>
       </div>
